@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import DeleteEmployee from "./DeleteEmployee";
 
 const EmployeeList = ({ department }) => {
   const [employees, setEmployees] = useState([]);
+  const [showDialog, setShowDialog] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
   const navigate = useNavigate();
 
   // Fetch employees based on department
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const url = department
-          ? `http://localhost:3000/api/employees/department/${department}`
-          : "http://localhost:3000/api/employees";
+        const url = "http://localhost:3000/api/employees";
         const response = await axios.get(url);
         setEmployees(response.data);
       } catch (error) {
@@ -23,22 +24,30 @@ const EmployeeList = ({ department }) => {
     fetchEmployees();
   }, [department]);
 
-  // Handle delete button click
-  const handleDelete = async (employeeId) => {
-    try {
-      const response = await axios.delete(
-        `http://localhost:3000/api/employees/${employeeId}`
-      );
-      if (response.status === 200) {
-        setEmployees((prevEmployees) =>
-          prevEmployees.filter((employee) => employee.employeeId !== employeeId)
-        );
-        alert("Employee deleted successfully");
-      }
-    } catch (error) {
-      console.error("Error deleting employee:", error);
-      alert("Error deleting employee. Please try again.");
-    }
+  // Open delete dialog
+  const handleDeleteClick = (employee) => {
+    setSelectedEmployee(employee);
+    setShowDialog(true);
+  };
+
+  // Handle delete success
+  const handleDeleteSuccess = (employeeId) => {
+    setEmployees((prevEmployees) =>
+      prevEmployees.filter((emp) => emp.employeeId !== employeeId)
+    );
+    setShowDialog(false);
+    setSelectedEmployee(null);
+  };
+
+  // Cancel delete dialog
+  const handleCancelDelete = () => {
+    setShowDialog(false);
+    setSelectedEmployee(null);
+  };
+
+  // Navigate to the Edit page
+  const handleEditClick = (employeeId) => {
+    navigate(`/edit-employee/${employeeId}`);
   };
 
   return (
@@ -49,7 +58,7 @@ const EmployeeList = ({ department }) => {
       <div className="overflow-x-auto rounded-xl shadow-md">
         <table className="table-auto border-2 border-gray-300 w-full text-left">
           <thead>
-            <tr className="bg-gray-200 ">
+            <tr className="bg-gray-200">
               <th className="border border-gray-300 px-4 py-2">Employee ID</th>
               <th className="border border-gray-300 px-4 py-2">First Name</th>
               <th className="border border-gray-300 px-4 py-2">Last Name</th>
@@ -62,7 +71,10 @@ const EmployeeList = ({ department }) => {
           <tbody>
             {employees.length > 0 ? (
               employees.map((employee) => (
-                <tr key={employee.employeeId} className="hover:bg-gray-100">
+                <tr
+                  key={employee.employeeId}
+                  className="hover:bg-gray-100 cursor-pointer"
+                  onClick={() => navigate(`/employees/${employee.employeeId}`)}>
                   <td className="border border-gray-300 px-4 py-2">
                     {employee.employeeId}
                   </td>
@@ -82,15 +94,19 @@ const EmployeeList = ({ department }) => {
                     {employee.phoneNumber}
                   </td>
                   <td className="border border-gray-300 px-4 py-2 space-x-2">
-                    {/* Edit Button: Using Link to navigate to the edit page */}
-                    <Link
-                      to={`/edit-employee/${employee.employeeId}`}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEditClick(employee.employeeId);
+                      }}
                       className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                       Edit
-                    </Link>
-                    {/* Delete Button: Using handleDelete function */}
+                    </button>
                     <button
-                      onClick={() => handleDelete(employee.employeeId)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteClick(employee);
+                      }}
                       className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
                       Delete
                     </button>
@@ -107,6 +123,15 @@ const EmployeeList = ({ department }) => {
           </tbody>
         </table>
       </div>
+
+      {/* Delete Employee Dialog */}
+      {showDialog && selectedEmployee && (
+        <DeleteEmployee
+          employee={selectedEmployee}
+          onCancel={handleCancelDelete}
+          onDeleteSuccess={handleDeleteSuccess}
+        />
+      )}
     </div>
   );
 };

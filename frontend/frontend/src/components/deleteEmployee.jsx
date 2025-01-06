@@ -1,61 +1,45 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
 
-const DeleteEmployee = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [employee, setEmployee] = useState(null);
-
-  useEffect(() => {
-    const fetchEmployee = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/api/employees/${id}`
-        );
-        setEmployee(response.data);
-      } catch (error) {
-        console.error("Error fetching employee data:", error);
-      }
-    };
-
-    fetchEmployee();
-  }, [id]);
-
-  const handleDelete = async () => {
+const DeleteEmployee = ({ employee, onCancel, onDeleteSuccess }) => {
+  const confirmDelete = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:3000/api/employees/${id}`
+        `http://localhost:3000/api/employees/${employee.employeeId}`
       );
-      if (response.data.success) {
-        alert("Employee deleted successfully");
-        navigate("/employees");
-      }
+      console.log(response.data); // Log successful response
+      alert("Employee deleted successfully!");
+      onDeleteSuccess(employee.employeeId); // Notify parent of successful deletion
     } catch (error) {
       console.error("Error deleting employee:", error);
-      alert("Error deleting employee");
+      if (error.response) {
+        alert(error.response.data.error || "Failed to delete employee.");
+      } else {
+        alert("Network error: Unable to delete employee.");
+      }
     }
   };
 
-  if (!employee) return <p>Loading...</p>;
-
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-lg">
-        <h2 className="text-2xl font-bold mb-6 text-center">Delete Employee</h2>
-        <p>
-          Are you sure you want to delete {employee.firstName}{" "}
-          {employee.lastName}?
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
+      <div className="bg-white p-8 rounded shadow-md max-w-sm w-full">
+        <h2 className="text-xl font-bold mb-4">Delete Employee</h2>
+        <p className="mb-4">
+          Are you sure you want to delete{" "}
+          <span className="font-bold">
+            {employee.firstName} {employee.lastName}
+          </span>{" "}
+          (Employee ID: {employee.employeeId})?
         </p>
-        <div className="mt-4 flex justify-between">
+        <div className="flex justify-end space-x-4">
           <button
-            onClick={() => navigate("/employees")}
-            className="w-1/2 bg-gray-500 text-white font-bold py-2 rounded-lg hover:bg-gray-600">
+            onClick={onCancel}
+            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
             Cancel
           </button>
           <button
-            onClick={handleDelete}
-            className="w-1/2 bg-red-500 text-white font-bold py-2 rounded-lg hover:bg-red-600">
+            onClick={confirmDelete}
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
             Delete
           </button>
         </div>

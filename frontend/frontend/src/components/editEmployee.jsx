@@ -6,6 +6,8 @@ const EditEmployee = () => {
   const { employeeId } = useParams();
 
   console.log("Employee ID:", employeeId);
+  console.log("Employee ID type:", typeof employeeId);
+
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: "",
@@ -60,10 +62,10 @@ const EditEmployee = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-4xl">
-        <h2 className="text-2xl font-bold mb-6 text-center">Edit Employee</h2>
-        <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-6">
+    <div className="flex justify-center items-center  m-10">
+      <div className="border-gray-200 bg-slate-50 border-2 p-8 rounded-lg shadow-lg w-full max-w-5xl">
+        <h2 className="text-2xl font-bold  text-center mb-8">Edit Employee</h2>
+        <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-8">
           <div>
             <label
               className="block text-gray-700 font-medium mb-2"

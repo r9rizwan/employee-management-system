@@ -120,22 +120,24 @@ exports.updateEmployee = async (req, res) => {
 };
 
 exports.deleteEmployee = async (req, res) => {
-    const { id } = req.params;
     try {
-        const deleted = await Employee.destroy({ where: { id } });
+        const { employeeId } = req.params;
 
-        // Check if the employee was deleted
-        if (!deleted) {
-            return res.status(404).json({ message: `Employee with ID ${id} not found` });
+        // Use Sequelize to delete the record
+        const result = await Employee.destroy({
+            where: { employeeId },
+        });
+
+        if (result === 0) {
+            return res.status(404).json({ message: 'Employee not found.' });
         }
 
-        res.status(200).json({ message: 'Employee deleted successfully' });
+        res.status(200).json({ message: 'Employee deleted successfully.' });
     } catch (error) {
-        console.error("Error deleting employee:", error);
-        res.status(500).json({ error: 'An error occurred while deleting the employee.' });
+        console.error('Error deleting employee:', error);
+        res.status(500).json({ message: 'Internal server error.' });
     }
 };
-
 exports.getEmployeeById = async (req, res) => {
     const { employeeId } = req.params;
     try {

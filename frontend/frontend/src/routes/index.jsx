@@ -1,14 +1,24 @@
+import React, { lazy, Suspense } from "react";
 import { useRoutes } from "react-router-dom";
-import AddEmployee from "../components/addEmployeeForm";
-import EmployeeList from "../components/employeeList";
-import EmployeeListByDepartment from "../components/employeeListByDepartment";
-import EditEmployee from "../components/EditEmployee";
-import DeleteEmployee from "../components/DeleteEmployee";
-import LoginForm from "../components/loginForm";
-import AdminRegisterForm from "../components/adminRegisterForm";
+
+// Lazy-loaded components
+const AddEmployee = lazy(() => import("../components/addEmployeeForm"));
+const EmployeeList = lazy(() => import("../components/employeeList"));
+const EmployeeListByDepartment = lazy(() =>
+  import("../components/employeeListByDepartment")
+);
+const EditEmployee = lazy(() => import("../components/EditEmployee"));
+const DeleteEmployee = lazy(() => import("../components/DeleteEmployee"));
+const LoginForm = lazy(() => import("../components/loginForm"));
+const AdminRegisterForm = lazy(() => import("../components/adminRegisterForm"));
+const IndividualEmployee = lazy(() =>
+  import("../components/individualEmployee")
+);
+const EmployeeSearchForm = lazy(() => import("../components/employeeFindById"));
+
 import MainLayout from "../layouts/main-layout";
 
-function Router() {
+const Routes = () => {
   const routes = useRoutes([
     {
       path: "/",
@@ -42,11 +52,19 @@ function Router() {
           path: "employees/delete/:employeeId",
           element: <DeleteEmployee />,
         },
+        {
+          path: "employees/:employeeId",
+          element: <IndividualEmployee />,
+        },
+        {
+          path: "search-employee",
+          element: <EmployeeSearchForm />,
+        },
       ],
     },
   ]);
 
-  return routes;
-}
+  return <Suspense fallback={<div>Loading...</div>}>{routes}</Suspense>;
+};
 
-export default Router;
+export default Routes;

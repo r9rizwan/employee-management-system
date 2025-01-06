@@ -24,7 +24,7 @@ const AdminRegisterForm = () => {
 
       if (response.status === 201) {
         setMessage("Registration successful! Redirecting to login...");
-        setTimeout(() => navigate("/"), 2000); // Redirect to login after 2 seconds
+        setTimeout(() => navigate("/login"), 2000); // Redirect to login after 2 seconds
       }
     } catch (err) {
       setMessage("Error registering user. Please try again.");
@@ -68,21 +68,7 @@ const AdminRegisterForm = () => {
               required
             />
           </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 font-medium mb-2"
-              htmlFor="role">
-              Role
-            </label>
-            <select
-              id="role"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}>
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
+
           <button
             type="submit"
             className="w-full bg-green-500 text-white font-bold py-2 rounded-lg hover:bg-green-600">
