@@ -128,9 +128,9 @@ npm run dev
 Start both the backend and frontend servers.
 Access the application at http://localhost:3000 (default frontend port).
 
-### API Endpoints
+## API Endpoints
 
-Employee Routes
+### Employee Routes
 POST /api/employees - Add a new employee
 GET /api/employees - Fetch all employees
 PUT /api/employees/:id - Update employee data
