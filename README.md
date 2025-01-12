@@ -104,28 +104,28 @@ frontend/
 
 ### Install dependencies:
 
-bash<br>
-npm install<br>
-Configure the database connection in src/config/db-connection.js.<br>
-Run migrations and seeders to set up the database:<br>
-bash<br>
-npx sequelize db:migrate<br>
-npx sequelize db:seed:all<br>
-Start the backend server:<br>
-bash<br>
-npm start<br>
+- bash<br>
+- npm install<br>
+- Configure the database connection in src/config/db-connection.js.<br>
+- Run migrations and seeders to set up the database:<br>
+  - bash<br>
+  - npx sequelize db:migrate<br>
+  - npx sequelize db:seed:all<br>
+- Start the backend server:<br>
+  - bash<br>
+  - npm start<br>
 
 ### Frontend Setup
 
-Navigate to the frontend directory:<br>
-bash<br>
-cd employee-management-system/frontend<br>
-Install dependencies:<br>
-bash<br>
-npm install<br>
-Start the development server:<br>
-bash<br>
-npm run dev<br>
+- Navigate to the frontend directory:<br>
+  - bash<br>
+  - cd employee-management-system/frontend<br>
+- Install dependencies:<br>
+  - bash<br>
+  - npm install<br>
+- Start the development server:<br>
+  - bash<br>
+  - npm run dev<br>
 
 ### Usage
 
