@@ -26,6 +26,7 @@ The Employee Management System is a full-stack web application designed for mana
 
 ### Backend
 
+<pre>
 backend/
 ├── package.json # Backend dependencies and scripts
 ├── package-lock.json # Dependency tree
@@ -55,6 +56,7 @@ backend/
 │ │ └── employee-routes.js
 │ ├── seeders/ # Initial data for the database
 │ │ └── seedData.js
+</pre>
 
 ### Frontend
 
@@ -86,13 +88,13 @@ frontend/
 
 ### Prerequisites
 
-- Node.js
-- npm or yarn
-- MySQL or another compatible database
+- Node.js <br>
+- npm or yarn <br>
+- MySQL or another compatible database <br>
 
 ### Backend Setup
 
-1. Navigate to the backend directory:
+1. Navigate to the backend directory:<br>
 
    ```bash
    cd employee-management-system/backend
@@ -102,76 +104,78 @@ frontend/
 
 ### Install dependencies:
 
-bash
-npm install
-Configure the database connection in src/config/db-connection.js.
-Run migrations and seeders to set up the database:
-bash
-npx sequelize db:migrate
-npx sequelize db:seed:all
-Start the backend server:
-bash
-npm start
+bash<br>
+npm install<br>
+Configure the database connection in src/config/db-connection.js.<br>
+Run migrations and seeders to set up the database:<br>
+bash<br>
+npx sequelize db:migrate<br>
+npx sequelize db:seed:all<br>
+Start the backend server:<br>
+bash<br>
+npm start<br>
 
 ### Frontend Setup
 
-Navigate to the frontend directory:
-bash
-cd employee-management-system/frontend
-Install dependencies:
-bash
-npm install
-Start the development server:
-bash
-npm run dev
+Navigate to the frontend directory:<br>
+bash<br>
+cd employee-management-system/frontend<br>
+Install dependencies:<br>
+bash<br>
+npm install<br>
+Start the development server:<br>
+bash<br>
+npm run dev<br>
 
 ### Usage
 
-Start both the backend and frontend servers.
-Access the application at http://localhost:3000 (default frontend port).
+- Start both the backend and frontend servers.<br>
+- Access the application at http://localhost:3000 (default frontend port).<br>
 
 ## API Endpoints
 
 ### Employee Routes
-POST /api/employees - Add a new employee
-GET /api/employees - Fetch all employees
-PUT /api/employees/:id - Update employee data
-DELETE /api/employees/:id - Delete an employee
+
+- POST /api/employees - Add a new employee<br>
+- GET /api/employees - Fetch all employees<br>
+- PUT /api/employees/:id - Update employee data<br>
+- DELETE /api/employees/:id - Delete an employee<br>
 
 ### Department Routes
 
-POST /api/departments - Add a new department
-GET /api/departments - Fetch all departments
-PUT /api/departments/:id - Update department data
-DELETE /api/departments/:id - Delete a department
+- POST /api/departments - Add a new department<br>
+- GET /api/departments - Fetch all departments<br>
+- PUT /api/departments/:id - Update department data<br>
+- DELETE /api/departments/:id - Delete a department<br>
 
 ### Designation Routes
 
-POST /api/designations - Add a new designation
-GET /api/designations - Fetch all designations
-PUT /api/designations/:id - Update designation data
-DELETE /api/designations/:id - Delete a designation
+- POST /api/designations - Add a new designation<br>
+- GET /api/designations - Fetch all designations<br>
+- PUT /api/designations/:id - Update designation data<br>
+- DELETE /api/designations/:id - Delete a designation<br>
 
 ## Technologies Used
 
-Frontend:
-React
-Tailwind CSS
-Vite
-React Hot Toast
-Context API
+Frontend:<br>
 
-## Backend:
+- React<br>
+- Tailwind CSS<br>
+- Vite<br>
+- React Hot Toast<br>
+- Context API<br>
 
-Express.js
-Sequelize
-MySQL
+## Backend:<br>
 
-## Other Tools:
+- Express.js<br>
+- Sequelize<br>
+- MySQL<br>
 
-Node.js
-npm
-Git
+## Other Tools:<br>
+
+- Node.js<br>
+- npm<br>
+- Git<br>
 
 ## License
 
