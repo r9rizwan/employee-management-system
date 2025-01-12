@@ -53,8 +53,8 @@ backend/
 │ │ ├── department-routes.js
 │ │ ├── designation-routes.js
 │ │ └── employee-routes.js
-│ └── seeders/ # Initial data for the database
-│ └── seedData.js
+│ ├── seeders/ # Initial data for the database
+│ │ └── seedData.js
 
 ### Frontend
 
