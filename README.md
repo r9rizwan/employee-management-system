@@ -58,27 +58,29 @@ backend/
 
 ### Frontend
 
+<pre>
 frontend/
-├── package.json # Frontend dependencies and scripts
-├── package-lock.json # Dependency tree
-├── vite.config.js # Vite configuration
-├── tailwind.config.js # Tailwind CSS setup
-├── src/ # Main frontend directory
-│ ├── App.css # Global styles
-│ ├── App.jsx # Main application component
-│ ├── components/ # Reusable UI components
-│ │ ├── Header.jsx # Header component
-│ │ ├── Footer.jsx # Footer component
-│ │ └── Toast.jsx # Notification component
-│ ├── context/ # Context API setup
-│ │ ├── AuthContext.jsx # Authentication context
-│ │ └── EmployeeContext.jsx # Employee management context
-│ ├── pages/ # Application pages
-│ │ ├── Dashboard.jsx
-│ │ ├── Employees.jsx
-│ │ └── Login.jsx
-│ ├── index.css # Tailwind CSS styles
-│ └── main.jsx # React entry point
+├── package.json         # Frontend dependencies and scripts
+├── package-lock.json    # Dependency tree
+├── vite.config.js       # Vite configuration
+├── tailwind.config.js   # Tailwind CSS setup
+├── src/                 # Main frontend directory
+│   ├── App.css          # Global styles
+│   ├── App.jsx          # Main application component
+│   ├── components/      # Reusable UI components
+│   │   ├── Header.jsx   # Header component
+│   │   ├── Footer.jsx   # Footer component
+│   │   └── Toast.jsx    # Notification component
+│   ├── context/         # Context API setup
+│   │   ├── AuthContext.jsx  # Authentication context
+│   │   └── EmployeeContext.jsx # Employee management context
+│   ├── pages/           # Application pages
+│   │   ├── Dashboard.jsx
+│   │   ├── Employees.jsx
+│   │   └── Login.jsx
+│   ├── index.css        # Tailwind CSS styles
+│   └── main.jsx         # React entry point
+</pre>
 
 ## Installation and Setup
 
