@@ -26,6 +26,7 @@ The Employee Management System is a full-stack web application designed for mana
 
 ### Backend
 
+backend/
 ├── package.json # Backend dependencies and scripts
 ├── package-lock.json # Dependency tree
 ├── src/ # Main backend directory
@@ -57,6 +58,7 @@ The Employee Management System is a full-stack web application designed for mana
 
 ### Frontend
 
+frontend/
 ├── package.json # Frontend dependencies and scripts
 ├── package-lock.json # Dependency tree
 ├── vite.config.js # Vite configuration
@@ -89,6 +91,7 @@ The Employee Management System is a full-stack web application designed for mana
 ### Backend Setup
 
 1. Navigate to the backend directory:
+
    ```bash
    cd employee-management-system/backend
 
