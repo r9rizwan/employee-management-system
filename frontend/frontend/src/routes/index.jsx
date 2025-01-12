@@ -15,6 +15,7 @@ const IndividualEmployee = lazy(() =>
   import("../components/individualEmployee")
 );
 const EmployeeSearchForm = lazy(() => import("../components/employeeFindById"));
+const HomePage = lazy(() => import("../components/home"));
 
 import MainLayout from "../layouts/main-layout";
 
@@ -59,6 +60,10 @@ const Routes = () => {
         {
           path: "search-employee",
           element: <EmployeeSearchForm />,
+        },
+        {
+          path: "home",
+          element: <HomePage />,
         },
       ],
     },

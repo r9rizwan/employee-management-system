@@ -3,13 +3,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DeleteEmployee from "./DeleteEmployee";
 
-const EmployeeList = ({ department }) => {
+const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
   const [showDialog, setShowDialog] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const navigate = useNavigate();
 
-  // Fetch employees based on department
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
@@ -22,7 +21,7 @@ const EmployeeList = ({ department }) => {
     };
 
     fetchEmployees();
-  }, [department]);
+  }, []);
 
   // Open delete dialog
   const handleDeleteClick = (employee) => {

@@ -1,4 +1,8 @@
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/db-connection');
 const Employee = require('../models/employee');
+const Department = require('../models/department');
+const Designation = require('../models/designation');
 
 const generateUniqueId = async () => {
     let unique = false;
@@ -22,55 +26,40 @@ const generateUniqueId = async () => {
 };
 exports.addEmployee = async (req, res) => {
     try {
-        const { firstName, lastName, department, phoneNumber, designation, nationalInsuranceNumber, address } = req.body;
-
-        // Validate required fields
-        if (!firstName || !lastName || !department || !phoneNumber || !designation || !nationalInsuranceNumber || !address) {
+        const { firstName, lastName, departmentId, phoneNumber, designationId, nationalInsuranceNumber, address } = req.body;
+        if (!firstName || !lastName || !departmentId || !phoneNumber || !designationId || !nationalInsuranceNumber || !address) {
             return res.status(400).json({ error: 'All fields are required' });
         }
 
-        // Generate unique employeeId before creating the employee
         const employeeId = await generateUniqueId();
-
-        // Create the employee in the database and save the employeeId
-        const employee = await Employee.create({
-            ...req.body, // Spread the rest of the fields from the request body
-            employeeId,   // Add the generated employeeId here
-        });
-
-        console.log("Generated employeeId:", employeeId);
-        console.log("Created Employee:", employee);
-
-        // Respond with the employeeId and other relevant data (not just the auto-generated id)
-        res.status(201).json({
-            employeeId: employee.employeeId,  // Explicitly return the employeeId
-            firstName: employee.firstName,
-            lastName: employee.lastName,
-            department: employee.department,
-            phoneNumber: employee.phoneNumber,
-            designation: employee.designation,
-            nationalInsuranceNumber: employee.nationalInsuranceNumber,
-            address: employee.address,
-            // Add any other fields you want to return
-        });
+        const employee = await Employee.create({ employeeId, firstName, lastName, departmentId, phoneNumber, designationId, nationalInsuranceNumber, address });
+        res.status(201).json(employee);
     } catch (error) {
-        console.error("Error adding employee:", error);
+        console.error('Error creating employee:', error);
         res.status(500).json({ error: 'An error occurred while adding the employee.' });
     }
 };
+
 exports.getAllEmployees = async (req, res) => {
     try {
-        const employees = await Employee.findAll();
-        if (employees.length === 0) {
-            return res.status(404).json({ message: 'No employees found' });
-        }
+        const employees = await Employee.findAll({
+            include: [
+                { model: Department, as: 'Department' },
+                { model: Designation, as: 'Designation' }
+            ],
+            attributes: {
+                include: [
+                    [sequelize.literal('`Department`.`name`'), 'department'],
+                    [sequelize.literal('`Designation`.`title`'), 'designation']
+                ]
+            }
+        });
         res.status(200).json(employees);
     } catch (error) {
-        console.error("Error fetching employees:", error);
+        console.error('Error fetching employees:', error);
         res.status(500).json({ error: 'An error occurred while fetching employees.' });
     }
 };
-
 exports.getEmployeesByDepartment = async (req, res) => {
     const { department } = req.params;
     try {
@@ -141,7 +130,13 @@ exports.deleteEmployee = async (req, res) => {
 exports.getEmployeeById = async (req, res) => {
     const { employeeId } = req.params;
     try {
-        const employee = await Employee.findOne({ where: { employeeId } });
+        const employee = await Employee.findOne({
+            where: { employeeId },
+            include: [
+                { model: Department, as: 'Department' },
+                { model: Designation, as: 'Designation' }
+            ]
+        });
         if (!employee) {
             return res.status(404).json({ message: `Employee with ID ${employeeId} not found` });
         }

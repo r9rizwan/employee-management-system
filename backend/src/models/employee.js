@@ -1,12 +1,14 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db-connection');
+const Department = require('./department');
+const Designation = require('./designation');
 
 const Employee = sequelize.define('Employee', {
     employeeId: {
         type: DataTypes.STRING(6),
         unique: true,
         allowNull: false,
-        primaryKey: true,  // Add this line to make employeeId the primary key
+        primaryKey: true,
     },
     firstName: {
         type: DataTypes.STRING,
@@ -16,18 +18,26 @@ const Employee = sequelize.define('Employee', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    department: {
-        type: DataTypes.STRING,
+    departmentId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+            model: Department,
+            key: 'departmentId',
+        },
     },
     phoneNumber: {
         type: DataTypes.STRING,
         unique: true,
         allowNull: false,
     },
-    designation: {
-        type: DataTypes.STRING,
+    designationId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+            model: Designation,
+            key: 'designationId',
+        },
     },
     nationalInsuranceNumber: {
         type: DataTypes.STRING,
@@ -42,5 +52,9 @@ const Employee = sequelize.define('Employee', {
     tableName: 'employees',
     timestamps: true,
 });
+
+// Define the relationship between models
+Employee.belongsTo(Department, { foreignKey: 'departmentId' });
+Employee.belongsTo(Designation, { foreignKey: 'designationId' });
 
 module.exports = Employee;

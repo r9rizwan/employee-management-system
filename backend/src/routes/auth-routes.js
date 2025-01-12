@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
 
-
 // Ensure you load environment variables
 require('dotenv').config();
 
@@ -29,10 +28,22 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ success: false, message: 'Invalid credentials' });
         }
 
-        // Create JWT token
-        const token = jwt.sign({ userId: user.id }, JWT_TOKEN, { expiresIn: '1h' });
+        // Create JWT token with user's userId instead of Sequelize's id
+        const token = jwt.sign({
+            userId: user.userId,
+            firstName: user.firstName,
+            lastName: user.lastName
+        }, JWT_TOKEN, { expiresIn: '1h' });
 
-        return res.json({ success: true, message: 'Login successful', token });
+        // Send back user details with token
+        return res.json({
+            success: true,
+            message: 'Login successful',
+            token,
+            userId: user.userId,
+            firstName: user.firstName,
+            lastName: user.lastName
+        });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ success: false, message: 'Server error' });
@@ -41,11 +52,11 @@ router.post('/login', async (req, res) => {
 
 // Register Route
 router.post('/register', async (req, res) => {
-    const { userId, password, role } = req.body;
+    const { userId, password, firstName, lastName } = req.body;
 
     // Basic validation
-    if (!userId || !password) {
-        return res.status(400).json({ success: false, message: 'User ID and password are required' });
+    if (!userId || !password || !firstName || !lastName) {
+        return res.status(400).json({ success: false, message: 'User ID, password, first name, and last name are required' });
     }
 
     try {
@@ -59,7 +70,8 @@ router.post('/register', async (req, res) => {
         const newUser = await User.create({
             userId,
             password, // This will be hashed automatically by the `beforeCreate` hook in the model
-            role, // Optional; defaults to 'user' if not provided
+            firstName,
+            lastName,
         });
 
         return res.status(201).json({ success: true, message: 'User registered successfully', userId: newUser.userId });

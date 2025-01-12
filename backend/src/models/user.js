@@ -13,14 +13,15 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    role: {
+    firstName: {
         type: DataTypes.STRING,
-        defaultValue: 'user', // Can be 'admin', 'user', etc.
+        allowNull: false,
     },
-    active: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true, // Set false if user is inactive
+    lastName: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
+
 }, {
     tableName: 'users',
     timestamps: false,

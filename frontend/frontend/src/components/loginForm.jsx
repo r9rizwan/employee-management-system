@@ -1,39 +1,65 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import axios from "axios";
+import { useUser } from "../providers/user-provider";
+import { useAuth } from "../providers/auth-provider";
+
+// Validation schema
+const loginSchema = yup.object().shape({
+  userId: yup.string().required("User ID is required"),
+  password: yup.string().required("Password is required"),
+});
 
 const LoginForm = () => {
-  const [userId, setUserId] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { setUser } = useUser();
+  const { login } = useAuth(); // Import login function from AuthContext
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(loginSchema),
+  });
 
+  const onSubmit = async (data) => {
     try {
       const response = await axios.post(
         "http://localhost:3000/api/auth/login",
-        { userId, password },
+        data,
         { headers: { "Content-Type": "application/json" } }
       );
 
       if (response.status === 200) {
-        console.log("Login successful", response.data);
-        navigate("/add-employee"); // Redirect to the Add Employee form
+        const { token } = response.data;
+        // Save token to local storage
+        login(token); // Set authentication state in AuthContext
+        // Set user details
+        setUser({
+          userId: response.data.userId,
+          firstName: response.data.firstName,
+          lastName: response.data.lastName,
+        });
+        navigate("/home");
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Invalid ID or password");
       console.error("Error during login:", err.response?.data || err);
+      alert(err.response?.data?.message || "Invalid ID or password");
     }
   };
+
   return (
-    <div className="flex justify-center w-full items-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        <form onSubmit={handleLogin}>
-          <div className="mb-4">
+    <div className="bg-gray-100 min-h-screen flex justify-center items-center">
+      <div className="bg-white p-10 border-2 rounded-lg shadow-lg w-full max-w-xl">
+        <h2 className="text-2xl font-bold text-center">Login</h2>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="grid grid-cols-1 gap-4">
+          <div>
             <label
               className="block text-gray-700 font-medium mb-2"
               htmlFor="userId">
@@ -43,12 +69,15 @@ const LoginForm = () => {
               type="text"
               id="userId"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-              value={userId}
-              onChange={(e) => setUserId(e.target.value)}
-              required
+              {...register("userId")}
             />
+            {errors.userId && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.userId.message}
+              </p>
+            )}
           </div>
-          <div className="mb-4">
+          <div>
             <label
               className="block text-gray-700 font-medium mb-2"
               htmlFor="password">
@@ -58,10 +87,13 @@ const LoginForm = () => {
               type="password"
               id="password"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
+              {...register("password")}
             />
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.password.message}
+              </p>
+            )}
           </div>
           <button
             type="submit"

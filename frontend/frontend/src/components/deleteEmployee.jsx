@@ -1,21 +1,34 @@
 import React from "react";
 import axios from "axios";
+import Notify from "../ui/components/Toaster";
 
 const DeleteEmployee = ({ employee, onCancel, onDeleteSuccess }) => {
   const confirmDelete = async () => {
+    const toastId = Notify.loading(
+      `Deleting employee ${employee.firstName} ${employee.lastName}...`
+    );
+
     try {
       const response = await axios.delete(
         `http://localhost:3000/api/employees/${employee.employeeId}`
       );
       console.log(response.data); // Log successful response
-      alert("Employee deleted successfully!");
+      Notify.update(toastId, "Employee deleted successfully!", "success");
       onDeleteSuccess(employee.employeeId); // Notify parent of successful deletion
     } catch (error) {
       console.error("Error deleting employee:", error);
       if (error.response) {
-        alert(error.response.data.error || "Failed to delete employee.");
+        Notify.update(
+          toastId,
+          error.response.data.error || "Failed to delete employee.",
+          "error"
+        );
       } else {
-        alert("Network error: Unable to delete employee.");
+        Notify.update(
+          toastId,
+          "Network error: Unable to delete employee.",
+          "error"
+        );
       }
     }
   };
